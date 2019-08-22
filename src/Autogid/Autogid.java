@@ -20,32 +20,26 @@ public class Autogid {
 	private static WebDriver driver;
 	
 	public static void main(String[] args) throws InterruptedException {
-		
-		//WebDriver driver = new HtmlUnitDriver();
-		
-		// And now use this to visit Google
-		//driver.get( "http://www.google.com" );
-
-		
+	
 		 OpenPage();			// function open page
-		 //SubmitLink();			// function open link
-		//FoundText();			// function find text, open horoskopai
-		//Thread.sleep(5000);	// wait 5 second 
-		 //driver.quit();			// close chrome 
-
+		
 	}
 	
 	/*
 	 * Function which open https://autogidas.lt/paieska/automobiliai/ on chrome web
-	 * search "Kas vyksta kaune"
 	 */
+	
 	public static void OpenPage() throws InterruptedException {
 		System.setProperty("webdriver.chrome.driver","F:\\MR\\1-Me_project\\Search for car\\Search-for-car\\selenium\\chromedriver_win32\\chromedriver.exe");
 		driver = new ChromeDriver();
 		driver.manage().window().maximize();
 		driver.get("https://autogidas.lt/paieska/automobiliai/");
-		//driver.findElement(By.name("f_1[]")).click();		
-	
+		//driver.findElement(By.name("f_1[]")).click();	
+		driver.findElement(By.className("cookies-message")).findElement(By.id("cookies-close")).click();
+		
+		/*
+		 * marke find and select auto marke and modeli
+		 */
 		WebElement marke;
 		marke = driver.findElement(By.name("f_1[]"));
 		marke.click();
@@ -54,6 +48,9 @@ public class Autogid {
 		marke = driver.findElement(By.xpath("//div[text()='Passat']"));
 		marke.click();
 		
+		/*
+		 * find and select price and year
+		 */
 		Select kaina_nuo = new Select(driver.findElement(By.id("f_215")));
 		kaina_nuo.selectByVisibleText("1000");
 		
@@ -65,35 +62,39 @@ public class Autogid {
 		
 		Select metai_iki = new Select(driver.findElement(By.id("f_42")));
 		metai_iki.selectByVisibleText("2008");
-	
+		
+		/*
+		 * find and select car type
+		 */
 		WebElement kebulas;
 		kebulas = driver.findElement(By.id("f_3"));
 		kebulas.click();
 		kebulas = driver.findElement(By.id("f_3[3]"));
 		kebulas.click();
-		kebulas = driver.findElement(By.xpath("//div[@class='values-container']/div[@class='show-all toolbar-actions']/button[@class='btn-action-close']"));
+		kebulas = driver.findElement(By.className("btn-action-close"));//driver.findElement(By.xpath("//div[@class='values-container']/div[@class='show-all toolbar-actions']/button[@class='btn-action-close']"));
+		kebulas.click();
 		
-		System.out.print(kebulas.getLocation());
-		//driver.switchTo().frame(0);
 		WebElement body;
 		body = driver.findElement(By.cssSelector("div.main-wrapper"));
 		Actions builder1 = new Actions(driver); 
-		builder1.moveToElement(body, 300, 300 ).click().build().perform();
 		
-		//driver.findElement(By.cssSelector("div.values-container")).findElement(By.cssSelector("div.show-all.toolbar-actionsr")).findElement(By.("button")).click();
-		//kebulas = driver.findElement(By.tagName("button"));
-		//driver.execute_script("arguments[0].click();", kebulas);
-	
-		//driver.findElement(By.xpath("//button[text()='Pasirinkti']")).click();
-		//kebulas.click();
-		
+		/*
+		 * find and select car fuel 
+		 */
 		WebElement kuras;
 		kuras = driver.findElement(By.id("f_2"));
 		kuras.click();
 		kuras = driver.findElement(By.id("f_2[1]"));
 		kuras.click();
+		
+		//driver.findElement(By.tagName("button")).click();//("btn-action-close")).click();//driver.findElement(By.xpath("//div[@class='values-container']/div[@class='show-all toolbar-actions']/button[@class='btn-action-close']"));
+		//kuras = driver.findElement(By.xpath("//div[@class='values-container']/div[@class='show-all toolbar-actions']/button[@class='btn-action-close']"));
+		//kuras.click();
 		builder1.moveToElement(body, 300, 300 ).click().build().perform();
 		
+		/*
+		 * find and select other car option
+		 */
 		Select P_deze = new Select(driver.findElement(By.id("f_10")));
 		P_deze.selectByVisibleText("Mechaninė");
 		
@@ -103,10 +104,20 @@ public class Autogid {
 		Select turis_iki = new Select(driver.findElement(By.id("f_62")));
 		turis_iki.selectByVisibleText("2.0");
 		
+		Select galia_nuo = new Select(driver.findElement(By.id("f_63")));
+		galia_nuo.selectByVisibleText("74 kW (100 AG)");
 		
-		WebElement searchBox;
-		searchBox = driver.findElement(By.id("submit-button"));
-		searchBox.click();
+		Select galia_iki = new Select(driver.findElement(By.id("f_64")));
+		galia_iki.selectByVisibleText("110 kW (150 AG)");
+		
+		Select dopor_number = new Select(driver.findElement(By.id("f_4")));
+		dopor_number.selectByVisibleText("4/5");	
+		
+		driver.findElement(By.id("submit-button")).click();
+		
+		Thread.sleep(5000);
+		driver.quit();			// close chrome 
+		
 	}
 
 
