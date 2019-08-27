@@ -14,12 +14,17 @@ import org.openqa.selenium.remote.server.handler.ClickElement;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Point;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class Autogid {
 	
 	private static WebDriver driver;
 	
-	public static void main(String[] args) throws InterruptedException {
+	public static void main(String[] args) throws InterruptedException, IOException {
 	
 		 OpenPage();			// function open page
 		
@@ -29,7 +34,7 @@ public class Autogid {
 	 * Function which open https://autogidas.lt/paieska/automobiliai/ on chrome web
 	 */
 	
-	public static void OpenPage() throws InterruptedException {
+	public static void OpenPage() throws IOException, InterruptedException {
 		System.setProperty("webdriver.chrome.driver","F:\\MR\\1-Me_project\\Search for car\\Search-for-car\\selenium\\chromedriver_win32\\chromedriver.exe");
 		driver = new ChromeDriver();
 		driver.manage().window().maximize();
@@ -38,15 +43,61 @@ public class Autogid {
 		driver.findElement(By.className("cookies-message")).findElement(By.id("cookies-close")).click();
 		
 		/*
-		 * marke find and select auto marke and modeli
+		 * marke find and select auto marke and modeli static option
 		 */
-		WebElement marke;
+	/*	WebElement marke;
 		marke = driver.findElement(By.name("f_1[]"));
 		marke.click();
 		marke = driver.findElement(By.xpath("//div[text()='Volkswagen']"));
 		marke.click();
 		marke = driver.findElement(By.xpath("//div[text()='Passat']"));
 		marke.click();
+		*/
+		
+		/*
+		 * Read auto marke and model from file line and find in web 
+		 */
+		String infofile = "F:\\MR\\1-Me_project\\Search for car\\Search-for-car\\info.txt";
+		FileReader fr = new FileReader(infofile);
+		@SuppressWarnings("resource")
+		BufferedReader br = new BufferedReader(fr);
+		String Content = "";
+		String rmarke = "";
+		String rmodel = "";
+		 while((Content = br.readLine())!= null){
+			 if (Content.indexOf("#marke") == 0)
+				{
+				 rmarke = br.readLine();
+				}
+			 
+			 if (Content.indexOf("#model") == 0)
+				{
+				 rmodel = br.readLine();
+				}
+
+			  }
+			
+		//String rmarke = br.readLine();
+		//String rmodel = br.readLine();
+		/*if (rmarke.indexOf("#marke") == 0)
+		*/
+		System.out.println(rmarke);
+		
+		System.out.println(rmodel);
+		
+		WebElement marke;
+		marke = driver.findElement(By.name("f_1[]"));
+		marke.click();
+		marke = driver.findElement(By.xpath("//div[text()="+"'"+ rmarke +"'"+"]"));
+		marke.click();
+		marke = driver.findElement(By.xpath("//div[text()="+"'"+ rmodel +"'"+"]"));
+		marke.click();
+		
+		//Loop to read all lines one by one from file and print It.
+		  /*while((Content = br.readLine())!= null){
+		   System.out.println(Content);
+		  }*/
+		
 		
 		/*
 		 * find and select price and year
@@ -90,7 +141,7 @@ public class Autogid {
 		//driver.findElement(By.tagName("button")).click();//("btn-action-close")).click();//driver.findElement(By.xpath("//div[@class='values-container']/div[@class='show-all toolbar-actions']/button[@class='btn-action-close']"));
 		//kuras = driver.findElement(By.xpath("//div[@class='values-container']/div[@class='show-all toolbar-actions']/button[@class='btn-action-close']"));
 		//kuras.click();
-		builder1.moveToElement(body, 300, 300 ).click().build().perform();
+		builder1.moveToElement(body, 0, 0 ).click().build().perform();
 		
 		/*
 		 * find and select other car option
